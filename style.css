@@ -2,7 +2,7 @@ body {
     margin: 0;
 
     width: 100vw;
-    height: 100vh;
+    height: 98vh;
 
     overflow: visible;
 
@@ -37,8 +37,11 @@ img {
 
 h3 {
     margin: 0;
-
+    
+    color: white;
     font-size: 0.75rem;
+    text-transform: uppercase;
+    text-align: center;
 }
 
 .card {
@@ -49,11 +52,19 @@ h3 {
 
     background-color: orange;
 
-    color: white;
-    text-transform: uppercase;
-    text-align: center;
-
     border-radius: 5px;
+    box-shadow: 2.5px 2.5px 2.5px gray;;
+
+    transition: 0.2s;
+}
+
+
+.card:hover{
+    scale: 1.1;
+}
+
+.card.flipped:hover{
+    scale: 1;
 }
 
 .closed {

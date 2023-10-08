@@ -18,8 +18,14 @@ class Card {
             </div>`
     }
 
-    flip() {
-        this.isFlipped = !this.isFlipped;
+    static flipCard(card) {
+        card.classList.add('flipped');
+        card.classList.remove('closed');
+    }
+
+    static closeCard(card) {
+        card.classList.add('closed');
+        card.classList.remove('flipped');
     }
 }
 
@@ -31,8 +37,6 @@ let isStart = true;
 let openCards = [];
 let matchedPairs = 0;
 let matchedPairToWin;
-
-
 
 function Initialization() {
     clearField();
@@ -55,7 +59,6 @@ function Initialization() {
     ];
 
     matchedPairToWin = animalData.length;
-    console.log(matchedPairToWin);
 
     for (const data of animalData) {
         cards.push(new Card(data.image, data.title, data.height));
@@ -63,41 +66,50 @@ function Initialization() {
     }
 
 
-    shuffleArray(cards);
+    shuffleCards(cards);
 
     //Insert logo card
     cards.splice(12, 0, new Card('images/m.png', '', '12vh', true));
 
     //Add cards to game field
     cards.forEach((card) => field.innerHTML += card.getCard());
+
+    const cardsInField = document.querySelectorAll('.card');
+
+    cardsInField.forEach((card) => {
+        card.addEventListener('click', () => {
+            handleCardClick(card);
+        });
+    });
 }
 
-
-function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
+function shuffleCards(cards) {
+    for (let i = cards.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
+        [cards[i], cards[j]] = [cards[j], cards[i]];
     }
 }
 
 function clearField() {
     field.innerHTML = '';
+    isStart = true;
+    openCards = [];
+    matchedPairs = 0;
 }
+
 Initialization();
 
 function handleCardClick(card) {
     if (isStart) {
         startTime = Date.now();
+        isStart = false;
     }
 
     if (card.classList.contains('flipped') || openCards.length >= 2) {
         return;
     }
 
-    isStart = false;
-
-    card.classList.remove('closed');
-    card.classList.add('flipped');
+    Card.flipCard(card);
 
     openCards.push(card);
 
@@ -115,23 +127,15 @@ function handleCardClick(card) {
                 alert(`You are winner. Your time ${Math.floor((Date.now() - startTime) / 1000)}s`);
                 Initialization();
             }
-        }
+        }   
         else {
             setTimeout(() => {
-                card1.classList.add('closed');
-                card1.classList.remove('flipped');
-                card2.classList.add('closed');
-                card2.classList.remove('flipped');
+                Card.closeCard(card1);
+                Card.closeCard(card2);
                 openCards = [];
             }, 500);
         }
     }
 }
 
-const cards = document.querySelectorAll('.card');
 
-cards.forEach((card) => {
-    card.addEventListener('click', () => {
-        handleCardClick(card);
-    });
-});
