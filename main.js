@@ -3,28 +3,29 @@ class Card {
         this.image = image;
         this.title = title;
         this.height = height;
-
-        isLogo ? this.isFlipped = true : this.isFlipped = false;
         this.isLogo = isLogo;
     }
 
     getCard() {
         return `
-            <div class="card ${this.isFlipped ? 'flipped' : 'closed'}">
-                    <div id="${this.isLogo ? 'logo' : ''}">
-                        <img style="height: ${this.height};" src="${this.image}">
-                        <h3>${this.title}</h3>
+            <div class="card">
+                <div class="content ${this.isLogo ? 'flipped' : ''}">
+                    <div class="front"></div>
+                    <div class="back">
+                        <div>
+                            <img style="height: ${this.height};" src="${this.image}">
+                            <h3>${this.title}</h3>
+                        </div>
                     </div>
+                </div>
             </div>`
     }
 
     static flipCard(card) {
         card.classList.add('flipped');
-        card.classList.remove('closed');
     }
 
     static closeCard(card) {
-        card.classList.add('closed');
         card.classList.remove('flipped');
     }
 }
@@ -65,7 +66,6 @@ function Initialization() {
         cards.push(new Card(data.image, data.title, data.height));
     }
 
-
     shuffleCards(cards);
 
     //Insert logo card
@@ -74,11 +74,11 @@ function Initialization() {
     //Add cards to game field
     cards.forEach((card) => field.innerHTML += card.getCard());
 
-    const cardsInField = document.querySelectorAll('.card');
+    const cardsContent = document.querySelectorAll('.content');
 
-    cardsInField.forEach((card) => {
-        card.addEventListener('click', () => {
-            handleCardClick(card);
+    cardsContent.forEach((content) => {
+        content.addEventListener('click', () => {
+            handleCardClick(content);
         });
     });
 }
@@ -127,7 +127,7 @@ function handleCardClick(card) {
                 alert(`You are winner. Your time ${Math.floor((Date.now() - startTime) / 1000)}s`);
                 Initialization();
             }
-        }   
+        }
         else {
             setTimeout(() => {
                 Card.closeCard(card1);
@@ -137,5 +137,3 @@ function handleCardClick(card) {
         }
     }
 }
-
-
