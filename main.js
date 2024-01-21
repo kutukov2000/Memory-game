@@ -9,7 +9,7 @@ class Card {
     getCard() {
         return `
             <div class="card">
-                <div class="content ${this.isLogo ? 'flipped' : ''}">
+                <div class="content ${this.isLogo ? 'flipped logo' : ''}">
                     <div class="front"></div>
                     <div class="back">
                         <div>
